@@ -12,7 +12,7 @@ namespace DFT2
         /// </summary>
         /// <param name="data">Samples</param>
         /// <param name="scaled">FFT output was scaled by 1/N, N = sample size</param>
-        /// <param name="nyquistBounded">Output from freq 0 inclusive to frequency N/2 inclusive. Scales values by 2.</param>
+        /// <param name="nyquistBounded">Input ranges from freq 0 inclusive to frequency N/2 inclusive. Halves values by 2.</param>
         /// <returns></returns>
         public static Complex[] Compute(Complex[] data, bool scaled = true, bool nyquistBounded = false)
         {
