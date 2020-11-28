@@ -1,40 +1,52 @@
 ﻿using System;
 using System.Numerics;
+using System.Collections.Generic;
+using System.Text;
+
 namespace DFT2
 {
-    /// <summary>
-    /// Based on the COMP 5703: ADVANCED ALGORITHMS, FALL 2016 by Amente Bekele
-    /// http://people.scs.carleton.ca/~maheshwa/courses/5703COMP/16Fall/FFT_Report.pdf
-    /// </summary>
-    public static class FFT
+    public static class IFFT
     {
         /// <summary>
-        /// Compute the FFT
+        /// Compute the Inverse FFT
         /// </summary>
         /// <param name="data">Samples</param>
-        /// <param name="scale">Scaled by 1/N, N = sample size</param>
+        /// <param name="scaled">FFT output was scaled by 1/N, N = sample size</param>
         /// <param name="nyquistBounded">Output from freq 0 inclusive to frequency N/2 inclusive. Scales values by 2.</param>
         /// <returns></returns>
-        public static Complex[] Compute(Complex[] data, bool scale = true, bool nyquistBounded = false)
+        public static Complex[] Compute(Complex[] data, bool scaled = true, bool nyquistBounded = false)
         {
-            double log = Math.Log(data.Length) / Math.Log(2);
-            if (Math.Ceiling(log) != Math.Floor(log))
-                throw new ArgumentException("Data length not a power of 2");
-            var computed = Cooley_Tukey(data);
-            for(int i = 0; scale && i < computed.Length; i++)
-            {
-                if (nyquistBounded)
-                    computed[i] /= data.Length * 2;
-                else
-                    computed[i] /= data.Length;
-            }
+
+            Complex[] twosided;
 
             if (nyquistBounded)
             {
-                var positiveComputed = new Complex[(data.Length / 2) + 1];
-                Array.Copy(computed, positiveComputed, positiveComputed.Length);
-                return positiveComputed;
+                
+                twosided = new Complex[(data.Length-1) * 2];
+                double scale = scaled ? 1 : 1.0 / twosided.Length;
+                int halfSize = twosided.Length / 2;
+
+                for(int i = 0; i < halfSize; i++)
+                {
+                    twosided[i] = data[i] * scale;
+                }
+                int reversed = halfSize;
+                for(int i = halfSize; i < twosided.Length; i++)
+                {
+                    twosided[i] = data[reversed] * scale;
+                    reversed--;
+                }
+
             }
+            else
+            {
+                twosided = data;
+            }
+
+
+            var computed = Cooley_Tukey(twosided);
+
+
             return computed;
         }
 
@@ -47,12 +59,12 @@ namespace DFT2
             else
             {
                 double angle = 2 * Math.PI / N;
-                Complex W_N = new Complex(Math.Cos(angle),-Math.Sin(angle));
+                Complex W_N = new Complex(Math.Cos(angle), Math.Sin(angle));
                 Complex W = 1;
                 Complex[] A_even = new Complex[halfN];
                 Complex[] A_odd = new Complex[halfN];
 
-                for(int i = 0; i < halfN; i++)
+                for (int i = 0; i < halfN; i++)
                 {
                     int doubleI = i * 2;
                     A_even[i] = data[doubleI];
@@ -64,7 +76,7 @@ namespace DFT2
 
                 var Y = new Complex[N];
 
-                for(int j = 0; j < halfN; j++)
+                for (int j = 0; j < halfN; j++)
                 {
                     Y[j] = Y_even[j] + (W * Y_odd[j]);
                     Y[j + halfN] = Y_even[j] - W * Y_odd[j];
