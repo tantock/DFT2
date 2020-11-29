@@ -74,4 +74,25 @@ namespace DFT2
             }
         }
     }
+
+    public static class FFT_Utility<T>
+    {
+        /// <summary>
+        /// Shifts array elements such that negative frequencies preceed the zero-th frequency
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="negIndex">Index start of negative frequency</param>
+        /// <returns></returns>
+        public static T[] Shift(T[] array, int negIndex)
+        {
+            T[] shiftedArr = new T[array.Length];
+            for(int i = 0; i < array.Length; i++)
+            {
+                int index = (i + negIndex) % array.Length;
+                shiftedArr[i] = array[(i + negIndex) % array.Length];
+            }
+
+            return shiftedArr;
+        }
+    }
 }
