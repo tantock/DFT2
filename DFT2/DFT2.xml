@@ -19,14 +19,6 @@
             <param name="nyquistBounded">Output from freq 0 inclusive to frequency N/2 inclusive. Scales values by 2.</param>
             <returns></returns>
         </member>
-        <member name="M:DFT2.FFT_Utility`1.Shift(`0[],System.Int32)">
-            <summary>
-            Shifts array elements such that negative frequencies preceed the zero-th frequency
-            </summary>
-            <param name="array"></param>
-            <param name="negIndex">Index start of negative frequency</param>
-            <returns></returns>
-        </member>
         <member name="M:DFT2.IFFT.Compute(System.Numerics.Complex[],System.Boolean,System.Boolean)">
             <summary>
             Compute the Inverse FFT
@@ -42,6 +34,21 @@
             </summary>
             <param name="data">Time series</param>
             <param name="sampleDuration">Duration of the time series</param>
+            <returns></returns>
+        </member>
+        <member name="M:DFT2.Utility.Bins`1.Shift(`0[],System.Int32)">
+            <summary>
+            Shifts array elements such that negative frequencies preceed the zero-th frequency
+            </summary>
+            <param name="array"></param>
+            <param name="negIndex">Index start of negative frequency</param>
+            <returns></returns>
+        </member>
+        <member name="M:DFT2.Utility.Window.Hann(System.Int32)">
+            <summary>
+            Outputs the Hann window constants
+            </summary>
+            <param name="N">N-point DFT size</param>
             <returns></returns>
         </member>
     </members>

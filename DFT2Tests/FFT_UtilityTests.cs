@@ -15,7 +15,7 @@ namespace DFT2.Tests
             int[] freq = new int[] { 0, 1, 2, 3, 4, -3, -2, -1 };
             int[] freqShift = new int[] { -3, -2, -1, 0, 1, 2, 3, 4};
 
-            var shifted = FFT_Utility<int>.Shift(freq, 5);
+            var shifted = DFT2.Utility.Bins<int>.Shift(freq, 5);
             
             for(int i = 0; i < freq.Length; i++)
             {
